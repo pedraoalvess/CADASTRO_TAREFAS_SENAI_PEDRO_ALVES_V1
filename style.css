@@ -1,17 +1,16 @@
-/* Variáveis CSS - facilitar o uso de temas para formatação */
+/* Variáveis CSS - facilitar o uso de temas para formatação*/
 :root{
     --gradiente-fundo: linear-gradient(135deg,#a8edea 0%, #fed6e3 100%);
     --fundo-cartao: #fff;
     --cor-texto:#2d3748;
     --cor-primaria:#6c5ce7;
-    --cor-primaria-destaque:#5b4bc4;
+    --cor-primaria-destaque:#5b4b54;
     --cor-borda:#edf2f7;
     --cor-perigo:#ff7675;
-    --cor-sucesso:#00b894;
     --cor-concluido:#a0aec0;
 }
 
-/* Modo escuro (ativado via classe no body) */
+/*Modo escuro (ativado via classe no body)*/
 body.modo-escuro{
     --gradiente-fundo:linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
     --fundo-cartao:#1a202c;
@@ -24,7 +23,7 @@ body.modo-escuro{
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    transition: background 0.3s, color 0.3s;
 }
 
 body{
@@ -66,10 +65,6 @@ body{
     cursor: pointer;
 }
 
-.botao-icone:hover{
-    color: var(--cor-primaria);
-}
-
 .caixa-entrada{
     display: flex;
     gap: 10px;
@@ -78,22 +73,17 @@ body{
 
 input[type="text"]{
     flex: 1;
-    min-width: 0;
     padding: 12px 15px;
     border: 2px solid var(--cor-borda);
     border-radius: 12px;
     outline: none;
     font-size: 0.95rem;
-    background: transparent;
+    background:transparent;
     color: var(--cor-texto);
 }
 
 input[type="text"]:focus{
     border-color: var(--cor-primaria);
-}
-
-input[type="text"].invalido{
-    border-color: var(--cor-perigo);
 }
 
 .botao-principal{
@@ -102,29 +92,14 @@ input[type="text"].invalido{
     border: none;
     padding: 12px 18px;
     border-radius: 12px;
-    font-weight: 600;
+    font-weight: 600px;
     cursor: pointer;
-    white-space: nowrap;
     transition: transform 0.1s, background 0.2s;
 }
 
 .botao-principal:hover{
     background: var(--cor-primaria-destaque);
     transform: translateY(-2px);
-}
-
-.botao-principal:active{
-    transform: translateY(0);
-}
-
-.mensagem-erro{
-    color: var(--cor-perigo);
-    font-size: 0.85rem;
-    margin: -10px 0 15px 4px;
-}
-
-.mensagem-erro[hidden]{
-    display: none;
 }
 
 .lista-tarefas{
@@ -137,18 +112,11 @@ input[type="text"].invalido{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
     padding: 12px;
     background: var(--cor-borda);
     border-radius: 10px;
     margin-bottom: 10px;
-    animation: aparecer 0.3s ease;
-}
-
-.item-tarefa span{
-    flex: 1;
-    cursor: pointer;
-    word-break: break-word;
+    animation: aparecer 0.3 else;
 }
 
 .item-tarefa.concluido span{
@@ -156,7 +124,7 @@ input[type="text"].invalido{
     color: var(--cor-concluido);
 }
 
-.acoes-tarefa{
+acoes-tarefa{
     display: flex;
     gap: 8px;
 }
@@ -169,19 +137,8 @@ input[type="text"].invalido{
     color: var(--cor-texto);
 }
 
-.botao-acao.concluir:hover{
-    color: var(--cor-sucesso);
-}
-
 .botao-acao.excluir:hover{
     color: var(--cor-perigo);
-}
-
-.lista-vazia{
-    text-align: center;
-    padding: 20px 0;
-    color: var(--cor-concluido);
-    font-size: 0.9rem;
 }
 
 .rodape-aplicacao{
@@ -193,17 +150,9 @@ input[type="text"].invalido{
 
 @keyframes aparecer{
     from{
-        opacity: 0;
-        transform: translateY(10px);
+        opacity: 0; transform: translateY(10px);
     }
     to{
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (prefers-reduced-motion: reduce){
-    .item-tarefa{
-        animation: none;
+        opacity: 1; transform: translateY(0);
     }
 }
