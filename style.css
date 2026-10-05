@@ -1,6 +1,5 @@
 /* Variáveis CSS - facilitar o uso de temas para formatação */
 :root{
-<<<<<<< HEAD
     --gradiente-fundo: linear-gradient(160deg, #d8f3e4 0%, #cfe9fb 100%);
     --fundo-cartao: #fff;
     --cor-texto: #1f2d2a;
@@ -13,7 +12,6 @@
     --cor-concluido: #8a9a93;
     --cor-atencao: #e17055;
     --sombra-cartao: 0 20px 45px rgba(24, 90, 70, 0.18);
-=======
     --gradiente-fundo: linear-gradient(135deg,#a8edea 0%, #fed6e3 100%);
     --fundo-cartao: #fff;
     --cor-texto:#2d3748;
@@ -23,12 +21,10 @@
     --cor-perigo:#ff7675;
     --cor-sucesso:#00b894;
     --cor-concluido:#a0aec0;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 /* Modo escuro (ativado via classe no body) */
 body.modo-escuro{
-<<<<<<< HEAD
     --gradiente-fundo: linear-gradient(160deg, #0c1f1b 0%, #0d2530 100%);
     --fundo-cartao: #12261f;
     --cor-texto: #eaf6f0;
@@ -38,23 +34,18 @@ body.modo-escuro{
     --cor-contorno: #2c5446;
     --cor-concluido: #7fa092;
     --sombra-cartao: 0 20px 45px rgba(0, 0, 0, 0.45);
-=======
     --gradiente-fundo:linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
     --fundo-cartao:#1a202c;
     --cor-texto:#f7fafc;
     --cor-borda:#4a5568;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-<<<<<<< HEAD
     font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-=======
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
@@ -72,7 +63,6 @@ body{
     color: var(--cor-texto);
     width: 100%;
     max-width: 420px;
-<<<<<<< HEAD
     border-radius: 24px;
     padding: 30px;
     box-shadow: var(--sombra-cartao);
@@ -148,7 +138,6 @@ body.modo-escuro .cartao-aplicacao::before{
     border-radius: 50%;
     font-size: 1.05rem;
     color: #fff;
-=======
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -171,22 +160,17 @@ body.modo-escuro .cartao-aplicacao::before{
     border: none;
     font-size: 1.2rem;
     color: var(--cor-texto);
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     cursor: pointer;
 }
 
 .botao-icone:hover{
-<<<<<<< HEAD
     background: rgba(255, 255, 255, 0.4);
-=======
     color: var(--cor-primaria);
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 .caixa-entrada{
     display: flex;
     gap: 10px;
-<<<<<<< HEAD
     margin-bottom: 14px;
 }
 
@@ -196,7 +180,6 @@ input[type="date"]{
     min-width: 0;
     padding: 12px 15px;
     border: 2px solid var(--cor-contorno);
-=======
     margin-bottom: 20px;
 }
 
@@ -205,7 +188,6 @@ input[type="text"]{
     min-width: 0;
     padding: 12px 15px;
     border: 2px solid var(--cor-borda);
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     border-radius: 12px;
     outline: none;
     font-size: 0.95rem;
@@ -213,7 +195,6 @@ input[type="text"]{
     color: var(--cor-texto);
 }
 
-<<<<<<< HEAD
 input[type="text"]:focus,
 input[type="date"]:focus{
     border-color: var(--cor-primaria);
@@ -246,7 +227,6 @@ body.modo-escuro input[type="date"]{
     filter: brightness(0.95);
     transform: translateY(-2px);
     box-shadow: 0 9px 18px rgba(31, 157, 107, 0.35);
-=======
 input[type="text"]:focus{
     border-color: var(--cor-primaria);
 }
@@ -270,14 +250,12 @@ input[type="text"].invalido{
 .botao-principal:hover{
     background: var(--cor-primaria-destaque);
     transform: translateY(-2px);
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 .botao-principal:active{
     transform: translateY(0);
 }
 
-<<<<<<< HEAD
 .botao-principal:focus-visible,
 .botao-icone:focus-visible,
 .botao-acao:focus-visible{
@@ -307,12 +285,10 @@ input[type="text"].invalido{
     color: var(--cor-perigo);
     font-size: 0.85rem;
     margin: -8px 0 15px 4px;
-=======
 .mensagem-erro{
     color: var(--cor-perigo);
     font-size: 0.85rem;
     margin: -10px 0 15px 4px;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 .mensagem-erro[hidden]{
@@ -323,10 +299,7 @@ input[type="text"].invalido{
     list-style: none;
     max-height: 280px;
     overflow-y: auto;
-<<<<<<< HEAD
     padding-right: 2px;
-=======
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 .item-tarefa{
@@ -334,21 +307,17 @@ input[type="text"].invalido{
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-<<<<<<< HEAD
     padding: 12px 14px;
     background: var(--cor-borda);
     border-left: 4px solid var(--cor-primaria);
     border-radius: 12px;
-=======
     padding: 12px;
     background: var(--cor-borda);
     border-radius: 10px;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     margin-bottom: 10px;
     animation: aparecer 0.3s ease;
 }
 
-<<<<<<< HEAD
 .item-tarefa.concluido{
     border-left-color: var(--cor-concluido);
 }
@@ -386,7 +355,6 @@ input[type="text"].invalido{
 .prazo-tarefa.atrasada{
     color: var(--cor-atencao);
     font-weight: 700;
-=======
 .item-tarefa span{
     flex: 1;
     cursor: pointer;
@@ -396,7 +364,6 @@ input[type="text"].invalido{
 .item-tarefa.concluido span{
     text-decoration: line-through;
     color: var(--cor-concluido);
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 .acoes-tarefa{
@@ -432,10 +399,7 @@ input[type="text"].invalido{
     font-size: 0.85rem;
     color: var(--cor-concluido);
     text-align: center;
-<<<<<<< HEAD
     font-weight: 600;
-=======
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 }
 
 @keyframes aparecer{
