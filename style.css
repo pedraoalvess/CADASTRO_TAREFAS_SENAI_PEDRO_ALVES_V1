@@ -12,15 +12,6 @@
     --cor-concluido: #8a9a93;
     --cor-atencao: #e17055;
     --sombra-cartao: 0 20px 45px rgba(24, 90, 70, 0.18);
-    --gradiente-fundo: linear-gradient(135deg,#a8edea 0%, #fed6e3 100%);
-    --fundo-cartao: #fff;
-    --cor-texto:#2d3748;
-    --cor-primaria:#6c5ce7;
-    --cor-primaria-destaque:#5b4bc4;
-    --cor-borda:#edf2f7;
-    --cor-perigo:#ff7675;
-    --cor-sucesso:#00b894;
-    --cor-concluido:#a0aec0;
 }
 
 /* Modo escuro (ativado via classe no body) */
@@ -34,10 +25,6 @@ body.modo-escuro{
     --cor-contorno: #2c5446;
     --cor-concluido: #7fa092;
     --sombra-cartao: 0 20px 45px rgba(0, 0, 0, 0.45);
-    --gradiente-fundo:linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-    --fundo-cartao:#1a202c;
-    --cor-texto:#f7fafc;
-    --cor-borda:#4a5568;
 }
 
 *{
@@ -45,7 +32,6 @@ body.modo-escuro{
     margin: 0;
     padding: 0;
     font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
@@ -77,14 +63,14 @@ body{
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: url('escudo-coritiba.webp') center 72% / 62% auto no-repeat;
+    background: url('escudo-coritiba.webp') center 72% / 58% auto no-repeat;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s;
 }
 
 body.modo-escuro .cartao-aplicacao::before{
-    opacity: 0.14; /* aumente para ficar mais forte, diminua para ficar mais sutil */
+    opacity: 0.25; /* aumente para ficar mais forte, diminua para ficar mais sutil */
 }
 
 /* Cabeçalho: capa de céu + foto de perfil redonda */
@@ -138,34 +124,11 @@ body.modo-escuro .cartao-aplicacao::before{
     border-radius: 50%;
     font-size: 1.05rem;
     color: #fff;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-}
-
-.cabecalho-aplicacao{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.cabecalho-aplicacao h1{
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.botao-icone{
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    color: var(--cor-texto);
     cursor: pointer;
 }
 
 .botao-icone:hover{
     background: rgba(255, 255, 255, 0.4);
-    color: var(--cor-primaria);
 }
 
 .caixa-entrada{
@@ -180,14 +143,6 @@ input[type="date"]{
     min-width: 0;
     padding: 12px 15px;
     border: 2px solid var(--cor-contorno);
-    margin-bottom: 20px;
-}
-
-input[type="text"]{
-    flex: 1;
-    min-width: 0;
-    padding: 12px 15px;
-    border: 2px solid var(--cor-borda);
     border-radius: 12px;
     outline: none;
     font-size: 0.95rem;
@@ -227,29 +182,6 @@ body.modo-escuro input[type="date"]{
     filter: brightness(0.95);
     transform: translateY(-2px);
     box-shadow: 0 9px 18px rgba(31, 157, 107, 0.35);
-input[type="text"]:focus{
-    border-color: var(--cor-primaria);
-}
-
-input[type="text"].invalido{
-    border-color: var(--cor-perigo);
-}
-
-.botao-principal{
-    background: var(--cor-primaria);
-    color: white;
-    border: none;
-    padding: 12px 18px;
-    border-radius: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform 0.1s, background 0.2s;
-}
-
-.botao-principal:hover{
-    background: var(--cor-primaria-destaque);
-    transform: translateY(-2px);
 }
 
 .botao-principal:active{
@@ -285,10 +217,6 @@ input[type="text"].invalido{
     color: var(--cor-perigo);
     font-size: 0.85rem;
     margin: -8px 0 15px 4px;
-.mensagem-erro{
-    color: var(--cor-perigo);
-    font-size: 0.85rem;
-    margin: -10px 0 15px 4px;
 }
 
 .mensagem-erro[hidden]{
@@ -311,9 +239,6 @@ input[type="text"].invalido{
     background: var(--cor-borda);
     border-left: 4px solid var(--cor-primaria);
     border-radius: 12px;
-    padding: 12px;
-    background: var(--cor-borda);
-    border-radius: 10px;
     margin-bottom: 10px;
     animation: aparecer 0.3s ease;
 }
@@ -355,15 +280,6 @@ input[type="text"].invalido{
 .prazo-tarefa.atrasada{
     color: var(--cor-atencao);
     font-weight: 700;
-.item-tarefa span{
-    flex: 1;
-    cursor: pointer;
-    word-break: break-word;
-}
-
-.item-tarefa.concluido span{
-    text-decoration: line-through;
-    color: var(--cor-concluido);
 }
 
 .acoes-tarefa{
@@ -417,7 +333,4 @@ input[type="text"].invalido{
     .item-tarefa{
         animation: none;
     }
-}
-}
-}
 }

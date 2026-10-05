@@ -1,26 +1,17 @@
-<<<<<<< HEAD
-=======
 // ===== Referências aos elementos da página =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 const campoTarefa = document.getElementById('campo-tarefa');
+const campoPrazo = document.getElementById('campo-prazo');
 const botaoAdicionar = document.getElementById('botao-adicionar');
 const listaTarefas = document.getElementById('lista-tarefas');
 const contadorTarefas = document.getElementById('contador-tarefas');
 const botaoTema = document.getElementById('botao-alterar-tema');
 const mensagemErro = document.getElementById('mensagem-erro');
-<<<<<<< HEAD
-const campoPrazo = document.getElementById('campo-prazo');
-
-let tarefas = [];
-
-=======
 
 // ===== Estado da aplicação =====
-// Cada tarefa: { id, texto, concluida }
+// Cada tarefa: { id, texto, concluida, prazo }  (prazo = 'AAAA-MM-DD' ou null)
 let tarefas = [];
 
 // ===== Persistência (localStorage) =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 function salvarTarefas() {
     try {
         localStorage.setItem('tarefas', JSON.stringify(tarefas));
@@ -32,23 +23,16 @@ function salvarTarefas() {
 function carregarTarefas() {
     try {
         const salvas = JSON.parse(localStorage.getItem('tarefas'));
-<<<<<<< HEAD
         if (Array.isArray(salvas)) {
             // Tarefas antigas (sem prazo) continuam funcionando
             tarefas = salvas.map(t => ({ ...t, prazo: t.prazo || null }));
         }
-=======
-        if (Array.isArray(salvas)) tarefas = salvas;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     } catch (erro) {
         tarefas = [];
     }
 }
 
-<<<<<<< HEAD
-=======
 // ===== Tema claro/escuro =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 function aplicarTema(escuro) {
     document.body.classList.toggle('modo-escuro', escuro);
     const icone = botaoTema.querySelector('i');
@@ -70,7 +54,7 @@ function carregarTema() {
     aplicarTema(escuro);
 }
 
-<<<<<<< HEAD
+// ===== Datas e prazos =====
 // Data de hoje no formato AAAA-MM-DD (fuso local)
 function hojeISO() {
     const d = new Date();
@@ -94,9 +78,7 @@ function situacaoPrazo(tarefa) {
     return { texto: `Prazo: ${formatarData(tarefa.prazo)}`, classe: '' };
 }
 
-=======
 // ===== Mensagens de erro =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 function mostrarErro(texto) {
     mensagemErro.textContent = texto;
     mensagemErro.hidden = false;
@@ -106,58 +88,40 @@ function mostrarErro(texto) {
 function limparErro() {
     mensagemErro.hidden = true;
     campoTarefa.classList.remove('invalido');
-<<<<<<< HEAD
     campoPrazo.classList.remove('invalido');
-}
-
-function atualizarContador() {
-    const total = tarefas.length;
-    const pendentes = tarefas.filter(t => !t.concluida).length;
-    const hoje = hojeISO();
-    const atrasadas = tarefas.filter(t => !t.concluida && t.prazo && t.prazo < hoje).length;
-    const sufixoAtraso = atrasadas > 0 ? ` - ${atrasadas} atrasada${atrasadas === 1 ? '' : 's'}` : '';
-=======
 }
 
 // ===== Contador =====
 function atualizarContador() {
     const total = tarefas.length;
     const pendentes = tarefas.filter(t => !t.concluida).length;
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
+    const hoje = hojeISO();
+    const atrasadas = tarefas.filter(t => !t.concluida && t.prazo && t.prazo < hoje).length;
+    const sufixoAtraso = atrasadas > 0 ? ` - ${atrasadas} atrasada${atrasadas === 1 ? '' : 's'}` : '';
 
     if (total === 0) {
         contadorTarefas.textContent = '0 tarefas na lista';
     } else if (total === 1) {
-        contadorTarefas.textContent = pendentes === 1
+        contadorTarefas.textContent = (pendentes === 1
             ? '1 tarefa na lista (1 pendente)'
-            : '1 tarefa na lista (concluída)';
-<<<<<<< HEAD
-        contadorTarefas.textContent += sufixoAtraso;
+            : '1 tarefa na lista (concluída)') + sufixoAtraso;
     } else {
         contadorTarefas.textContent = `${total} tarefas na lista (${pendentes} pendente${pendentes === 1 ? '' : 's'})${sufixoAtraso}`;
     }
 }
 
-=======
-    } else {
-        contadorTarefas.textContent = `${total} tarefas na lista (${pendentes} pendente${pendentes === 1 ? '' : 's'})`;
-    }
-}
-
 // ===== Renderização =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 function criarItem(tarefa) {
     const item = document.createElement('li');
     item.className = 'item-tarefa' + (tarefa.concluida ? ' concluido' : '');
     item.dataset.id = tarefa.id;
 
-<<<<<<< HEAD
     const info = document.createElement('div');
     info.className = 'info-tarefa';
 
     const texto = document.createElement('span');
     texto.className = 'texto-tarefa';
-    texto.textContent = tarefa.texto;
+    texto.textContent = tarefa.texto; // textContent evita injeção de HTML
     texto.title = 'Clique para concluir';
     info.appendChild(texto);
 
@@ -168,11 +132,6 @@ function criarItem(tarefa) {
         prazo.textContent = situacao.texto;
         info.appendChild(prazo);
     }
-=======
-    const texto = document.createElement('span');
-    texto.textContent = tarefa.texto; // textContent evita injeção de HTML
-    texto.title = 'Clique para concluir';
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 
     const acoes = document.createElement('div');
     acoes.className = 'acoes-tarefa';
@@ -190,11 +149,7 @@ function criarItem(tarefa) {
     botaoExcluir.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
     acoes.append(botaoConcluir, botaoExcluir);
-<<<<<<< HEAD
     item.append(info, acoes);
-=======
-    item.append(texto, acoes);
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     return item;
 }
 
@@ -213,10 +168,7 @@ function renderizar() {
     atualizarContador();
 }
 
-<<<<<<< HEAD
-=======
 // ===== Ações =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 function adicionarTarefa() {
     const texto = campoTarefa.value.trim();
 
@@ -233,7 +185,6 @@ function adicionarTarefa() {
         return;
     }
 
-<<<<<<< HEAD
     const prazo = campoPrazo.value || null;
     if (prazo && prazo < hojeISO()) {
         mostrarErro('O prazo não pode ser uma data que já passou.');
@@ -245,10 +196,6 @@ function adicionarTarefa() {
     tarefas.push({ id: Date.now(), texto, concluida: false, prazo });
     campoTarefa.value = '';
     campoPrazo.value = '';
-=======
-    tarefas.push({ id: Date.now(), texto, concluida: false });
-    campoTarefa.value = '';
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
     limparErro();
     salvarTarefas();
     renderizar();
@@ -269,10 +216,7 @@ function excluirTarefa(id) {
     renderizar();
 }
 
-<<<<<<< HEAD
-=======
 // ===== Eventos =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 botaoAdicionar.addEventListener('click', adicionarTarefa);
 
 campoTarefa.addEventListener('keydown', evento => {
@@ -280,14 +224,10 @@ campoTarefa.addEventListener('keydown', evento => {
 });
 
 campoTarefa.addEventListener('input', limparErro);
-<<<<<<< HEAD
 campoPrazo.addEventListener('input', limparErro);
 campoPrazo.min = hojeISO();
 
-=======
-
 // Delegação de eventos: um único listener cuida de todos os itens da lista
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 listaTarefas.addEventListener('click', evento => {
     const item = evento.target.closest('.item-tarefa');
     if (!item) return;
@@ -295,11 +235,7 @@ listaTarefas.addEventListener('click', evento => {
 
     if (evento.target.closest('.excluir')) {
         excluirTarefa(id);
-<<<<<<< HEAD
     } else if (evento.target.closest('.concluir') || evento.target.closest('.texto-tarefa')) {
-=======
-    } else if (evento.target.closest('.concluir') || evento.target.tagName === 'SPAN') {
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
         alternarConclusao(id);
     }
 });
@@ -308,10 +244,7 @@ botaoTema.addEventListener('click', () => {
     aplicarTema(!document.body.classList.contains('modo-escuro'));
 });
 
-<<<<<<< HEAD
-=======
 // ===== Inicialização =====
->>>>>>> 36379eb3127aac5873cd3064c7e3a6b6c02555f9
 carregarTema();
 carregarTarefas();
 renderizar();
