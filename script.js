@@ -6,10 +6,20 @@ const listaTarefas = document.getElementById('lista-tarefas');
 const contadorTarefas = document.getElementById('contador-tarefas');
 const botaoTema = document.getElementById('botao-alterar-tema');
 const mensagemErro = document.getElementById('mensagem-erro');
+const barraProgresso = document.getElementById('barra-progresso');
+const textoProgresso = document.getElementById('texto-progresso');
+const filtros = document.getElementById('filtros');
+const botaoLimpar = document.getElementById('botao-limpar');
+const aviso = document.getElementById('aviso');
+const avisoTexto = document.getElementById('aviso-texto');
+const botaoDesfazer = document.getElementById('botao-desfazer');
 
 // ===== Estado da aplicação =====
 // Cada tarefa: { id, texto, concluida, prazo }  (prazo = 'AAAA-MM-DD' ou null)
 let tarefas = [];
+let filtroAtual = 'todas';   // todas | pendentes | concluidas
+let ultimaExcluida = null;   // { tarefa, indice } para o "Desfazer"
+let timerAviso = null;
 
 // ===== Persistência (localStorage) =====
 function salvarTarefas() {
@@ -122,7 +132,9 @@ function criarItem(tarefa) {
     const texto = document.createElement('span');
     texto.className = 'texto-tarefa';
     texto.textContent = tarefa.texto; // textContent evita injeção de HTML
-    texto.title = 'Clique para concluir';
+    texto.title = 'Clique para concluir • duplo clique para editar';
+    texto.tabIndex = 0;
+    texto.setAttribute('role', 'button');
     info.appendChild(texto);
 
     if (tarefa.prazo) {
@@ -153,19 +165,77 @@ function criarItem(tarefa) {
     return item;
 }
 
+// Pendentes primeiro; dentro de cada grupo, prazo mais próximo primeiro (sem prazo vai pro fim)
+function ordenar(lista) {
+    return [...lista].sort((a, b) =>
+        (a.concluida - b.concluida) ||
+        (a.prazo || '9999').localeCompare(b.prazo || '9999'));
+}
+
+function atualizarProgresso() {
+    const total = tarefas.length;
+    const feitas = tarefas.filter(t => t.concluida).length;
+    const pct = total === 0 ? 0 : Math.round((feitas / total) * 100);
+    barraProgresso.style.width = pct + '%';
+    textoProgresso.textContent = total > 0 && feitas === total ? 'Tudo concluído! 🎉' : `${pct}% concluído`;
+    botaoLimpar.hidden = feitas === 0;
+}
+
 function renderizar() {
     listaTarefas.innerHTML = '';
 
-    if (tarefas.length === 0) {
+    const visiveis = ordenar(tarefas.filter(t =>
+        filtroAtual === 'todas' || (filtroAtual === 'pendentes' ? !t.concluida : t.concluida)));
+
+    if (visiveis.length === 0) {
         const vazio = document.createElement('li');
         vazio.className = 'lista-vazia';
-        vazio.textContent = 'Nenhuma tarefa por aqui. Adicione a primeira!';
+        vazio.textContent = tarefas.length === 0
+            ? 'Nenhuma tarefa por aqui. Adicione a primeira!'
+            : 'Nenhuma tarefa neste filtro.';
         listaTarefas.appendChild(vazio);
     } else {
-        tarefas.forEach(tarefa => listaTarefas.appendChild(criarItem(tarefa)));
+        visiveis.forEach(tarefa => listaTarefas.appendChild(criarItem(tarefa)));
     }
 
     atualizarContador();
+    atualizarProgresso();
+}
+
+function mostrarAviso(mensagem) {
+    avisoTexto.textContent = mensagem;
+    aviso.hidden = false;
+    clearTimeout(timerAviso);
+    timerAviso = setTimeout(() => { aviso.hidden = true; ultimaExcluida = null; }, 5000);
+}
+
+function iniciarEdicao(id, span) {
+    const tarefa = tarefas.find(t => t.id === id);
+    if (!tarefa) return;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'edicao';
+    input.maxLength = 40;
+    input.value = tarefa.texto;
+    span.replaceWith(input);
+    input.focus();
+    input.select();
+
+    let terminou = false;
+    const concluirEdicao = () => {
+        if (terminou) return;
+        terminou = true;
+        const novo = input.value.trim();
+        const duplicada = tarefas.some(t => t.id !== id && t.texto.toLowerCase() === novo.toLowerCase());
+        if (novo && !duplicada) tarefa.texto = novo;
+        salvarTarefas();
+        renderizar();
+    };
+    input.addEventListener('blur', concluirEdicao);
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') concluirEdicao();
+        if (e.key === 'Escape') { input.value = tarefa.texto; concluirEdicao(); }
+    });
 }
 
 // ===== Ações =====
@@ -211,7 +281,11 @@ function alternarConclusao(id) {
 }
 
 function excluirTarefa(id) {
-    tarefas = tarefas.filter(t => t.id !== id);
+    const indice = tarefas.findIndex(t => t.id === id);
+    if (indice === -1) return;
+    ultimaExcluida = { tarefa: tarefas[indice], indice };
+    tarefas.splice(indice, 1);
+    mostrarAviso('Tarefa excluída.');
     salvarTarefas();
     renderizar();
 }
@@ -244,7 +318,56 @@ botaoTema.addEventListener('click', () => {
     aplicarTema(!document.body.classList.contains('modo-escuro'));
 });
 
+filtros.addEventListener('click', evento => {
+    const botao = evento.target.closest('.filtro');
+    if (!botao) return;
+    filtroAtual = botao.dataset.filtro;
+    filtros.querySelectorAll('.filtro').forEach(b => b.classList.toggle('ativo', b === botao));
+    renderizar();
+});
+
+botaoLimpar.addEventListener('click', () => {
+    tarefas = tarefas.filter(t => !t.concluida);
+    salvarTarefas();
+    renderizar();
+});
+
+botaoDesfazer.addEventListener('click', () => {
+    if (!ultimaExcluida) return;
+    tarefas.splice(ultimaExcluida.indice, 0, ultimaExcluida.tarefa);
+    ultimaExcluida = null;
+    aviso.hidden = true;
+    salvarTarefas();
+    renderizar();
+});
+
+// Duplo clique no texto = editar
+listaTarefas.addEventListener('dblclick', evento => {
+    const span = evento.target.closest('.texto-tarefa');
+    if (!span) return;
+    iniciarEdicao(Number(span.closest('.item-tarefa').dataset.id), span);
+});
+
+// Teclado: Enter/Espaço no texto = concluir
+listaTarefas.addEventListener('keydown', evento => {
+    const span = evento.target.closest('.texto-tarefa');
+    if (span && (evento.key === 'Enter' || evento.key === ' ')) {
+        evento.preventDefault();
+        alternarConclusao(Number(span.closest('.item-tarefa').dataset.id));
+    }
+});
+
 // ===== Inicialização =====
 carregarTema();
 carregarTarefas();
 renderizar();
+
+// Quando o dia vira, atualiza os prazos ("vence hoje" -> "atrasada")
+let diaAtual = hojeISO();
+setInterval(() => {
+    if (hojeISO() !== diaAtual) {
+        diaAtual = hojeISO();
+        campoPrazo.min = diaAtual;
+        renderizar();
+    }
+}, 60000);

@@ -37,13 +37,30 @@
 
         <p class="mensagem-erro" id="mensagem-erro" role="alert" hidden></p>
 
+        <div class="progresso">
+            <div class="progresso-trilho"><div class="progresso-barra" id="barra-progresso"></div></div>
+            <span id="texto-progresso">0% concluído</span>
+        </div>
+
+        <div class="filtros" id="filtros">
+            <button class="filtro ativo" data-filtro="todas">Todas</button>
+            <button class="filtro" data-filtro="pendentes">Pendentes</button>
+            <button class="filtro" data-filtro="concluidas">Concluídas</button>
+        </div>
+
         <ul class="lista-tarefas" id="lista-tarefas">
             <!-- As tarefas serão inseridas dinamicamente via JavaScript -->
         </ul>
 
         <footer class="rodape-aplicacao">
             <span id="contador-tarefas">0 tarefas na lista</span>
+            <button class="botao-limpar" id="botao-limpar" hidden><i class="fa-solid fa-broom"></i> Limpar concluídas</button>
         </footer>
+    </div>
+
+    <div class="aviso" id="aviso" role="status" hidden>
+        <span id="aviso-texto"></span>
+        <button id="botao-desfazer">Desfazer</button>
     </div>
 
     <script src="script.js"></script>

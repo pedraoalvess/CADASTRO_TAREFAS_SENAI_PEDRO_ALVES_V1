@@ -334,3 +334,120 @@ body.modo-escuro input[type="date"]{
         animation: none;
     }
 }
+
+/* ===== Progresso ===== */
+.progresso{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--cor-concluido);
+}
+
+.progresso-trilho{
+    flex: 1;
+    height: 8px;
+    background: var(--cor-borda);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.progresso-barra{
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #2bb673, var(--cor-primaria));
+    border-radius: 99px;
+    transition: width 0.5s ease;
+}
+
+/* ===== Filtros ===== */
+.filtros{
+    display: flex;
+    gap: 6px;
+    padding: 4px;
+    margin-bottom: 14px;
+    background: var(--cor-borda);
+    border-radius: 12px;
+}
+
+.filtro{
+    flex: 1;
+    padding: 7px 4px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--cor-concluido);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.filtro.ativo{
+    background: var(--fundo-cartao);
+    color: var(--cor-primaria);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.filtro:focus-visible{
+    outline: 3px solid var(--cor-primaria);
+}
+
+/* ===== Edição inline, limpar e aviso ===== */
+input[type="text"].edicao{
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.rodape-aplicacao{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.botao-limpar{
+    border: none;
+    background: none;
+    color: var(--cor-perigo);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.botao-limpar:hover{
+    text-decoration: underline;
+}
+
+.botao-limpar[hidden],
+.aviso[hidden]{
+    display: none;
+}
+
+.aviso{
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    background: var(--cor-texto);
+    color: var(--fundo-cartao);
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+
+.aviso button{
+    border: none;
+    background: none;
+    color: inherit;
+    font-weight: 800;
+    text-decoration: underline;
+    cursor: pointer;
+}
