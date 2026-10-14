@@ -1,5 +1,8 @@
 // ===== Referências aos elementos da página =====
 const campoTarefa = document.getElementById('campo-tarefa');
+const campoCategoria = document.getElementById('campo-categoria');
+const arquivoBackup = document.getElementById('arquivo-backup');
+const campoBusca = document.getElementById('campo-busca');
 const campoPrazo = document.getElementById('campo-prazo');
 const botaoAdicionar = document.getElementById('botao-adicionar');
 const listaTarefas = document.getElementById('lista-tarefas');
@@ -15,8 +18,9 @@ const avisoTexto = document.getElementById('aviso-texto');
 const botaoDesfazer = document.getElementById('botao-desfazer');
 
 // ===== Estado da aplicação =====
-// Cada tarefa: { id, texto, concluida, prazo }  (prazo = 'AAAA-MM-DD' ou null)
+// Cada tarefa: { id, texto, concluida, prazo, importante, categoria }  (prazo = 'AAAA-MM-DD' ou null)
 let tarefas = [];
+let busca = '';              // texto digitado na busca (minúsculo)
 let filtroAtual = 'todas';   // todas | pendentes | concluidas
 let ultimaExcluida = null;   // { tarefa, indice } para o "Desfazer"
 let timerAviso = null;
@@ -79,13 +83,19 @@ function formatarData(iso) {
     return `${dia}/${mes}/${ano}`;
 }
 
+// Dias entre hoje e uma data AAAA-MM-DD
+function diasAte(iso) {
+    return Math.round((new Date(iso + 'T00:00') - new Date(hojeISO() + 'T00:00')) / 86400000);
+}
+
 // Texto e situação do prazo de uma tarefa
 function situacaoPrazo(tarefa) {
     const hoje = hojeISO();
     if (tarefa.concluida) return { texto: `Prazo: ${formatarData(tarefa.prazo)}`, classe: '' };
     if (tarefa.prazo < hoje) return { texto: `Atrasada desde ${formatarData(tarefa.prazo)}`, classe: 'atrasada' };
     if (tarefa.prazo === hoje) return { texto: 'Vence hoje', classe: 'hoje' };
-    return { texto: `Prazo: ${formatarData(tarefa.prazo)}`, classe: '' };
+    const dias = diasAte(tarefa.prazo);
+    return { texto: `Prazo: ${formatarData(tarefa.prazo)} (${dias === 1 ? 'amanhã' : `em ${dias} dias`})`, classe: '' };
 }
 
 // ===== Mensagens de erro =====
@@ -137,12 +147,23 @@ function criarItem(tarefa) {
     texto.setAttribute('role', 'button');
     info.appendChild(texto);
 
-    if (tarefa.prazo) {
-        const situacao = situacaoPrazo(tarefa);
-        const prazo = document.createElement('small');
-        prazo.className = 'prazo-tarefa ' + situacao.classe;
-        prazo.textContent = situacao.texto;
-        info.appendChild(prazo);
+    if (tarefa.categoria || tarefa.prazo) {
+        const meta = document.createElement('div');
+        meta.className = 'meta-tarefa';
+        if (tarefa.categoria) {
+            const chip = document.createElement('small');
+            chip.className = 'categoria-tarefa';
+            chip.textContent = tarefa.categoria;
+            meta.appendChild(chip);
+        }
+        if (tarefa.prazo) {
+            const situacao = situacaoPrazo(tarefa);
+            const prazo = document.createElement('small');
+            prazo.className = 'prazo-tarefa ' + situacao.classe;
+            prazo.textContent = situacao.texto;
+            meta.appendChild(prazo);
+        }
+        info.appendChild(meta);
     }
 
     const acoes = document.createElement('div');
@@ -152,7 +173,14 @@ function criarItem(tarefa) {
     botaoConcluir.className = 'botao-acao concluir';
     botaoConcluir.setAttribute('aria-label', 'Concluir tarefa');
     botaoConcluir.title = tarefa.concluida ? 'Desfazer' : 'Concluir';
-    botaoConcluir.innerHTML = `<i class="fa-solid ${tarefa.concluida ? 'fa-rotate-left' : 'fa-check'}"></i>`;
+    botaoConcluir.innerHTML = '<i class="fa-solid fa-check"></i>';
+
+    const botaoEstrela = document.createElement('button');
+    botaoEstrela.className = 'botao-acao estrela' + (tarefa.importante ? ' ativa' : '');
+    botaoEstrela.setAttribute('aria-label', 'Marcar como importante');
+    botaoEstrela.setAttribute('aria-pressed', !!tarefa.importante);
+    botaoEstrela.title = tarefa.importante ? 'Tirar destaque' : 'Marcar como importante';
+    botaoEstrela.innerHTML = `<i class="${tarefa.importante ? 'fa-solid' : 'fa-regular'} fa-star"></i>`;
 
     const botaoExcluir = document.createElement('button');
     botaoExcluir.className = 'botao-acao excluir';
@@ -160,15 +188,16 @@ function criarItem(tarefa) {
     botaoExcluir.title = 'Excluir';
     botaoExcluir.innerHTML = '<i class="fa-solid fa-trash"></i>';
 
-    acoes.append(botaoConcluir, botaoExcluir);
-    item.append(info, acoes);
+    acoes.append(botaoEstrela, botaoExcluir);
+    item.append(botaoConcluir, info, acoes);
     return item;
 }
 
-// Pendentes primeiro; dentro de cada grupo, prazo mais próximo primeiro (sem prazo vai pro fim)
+// Pendentes primeiro; depois importantes; depois prazo mais próximo (sem prazo vai pro fim)
 function ordenar(lista) {
     return [...lista].sort((a, b) =>
         (a.concluida - b.concluida) ||
+        (!!b.importante - !!a.importante) ||
         (a.prazo || '9999').localeCompare(b.prazo || '9999'));
 }
 
@@ -177,7 +206,9 @@ function atualizarProgresso() {
     const feitas = tarefas.filter(t => t.concluida).length;
     const pct = total === 0 ? 0 : Math.round((feitas / total) * 100);
     barraProgresso.style.width = pct + '%';
-    textoProgresso.textContent = total > 0 && feitas === total ? 'Tudo concluído! 🎉' : `${pct}% concluído`;
+    const tudoFeito = total > 0 && feitas === total;
+    barraProgresso.classList.toggle('completa', tudoFeito);
+    textoProgresso.textContent = tudoFeito ? 'Tudo concluído!' : `${pct}% concluído`;
     botaoLimpar.hidden = feitas === 0;
 }
 
@@ -185,14 +216,15 @@ function renderizar() {
     listaTarefas.innerHTML = '';
 
     const visiveis = ordenar(tarefas.filter(t =>
-        filtroAtual === 'todas' || (filtroAtual === 'pendentes' ? !t.concluida : t.concluida)));
+        (filtroAtual === 'todas' || (filtroAtual === 'pendentes' ? !t.concluida : t.concluida)) &&
+        `${t.texto} ${t.categoria || ''}`.toLowerCase().includes(busca)));
 
     if (visiveis.length === 0) {
         const vazio = document.createElement('li');
         vazio.className = 'lista-vazia';
         vazio.textContent = tarefas.length === 0
             ? 'Nenhuma tarefa por aqui. Adicione a primeira!'
-            : 'Nenhuma tarefa neste filtro.';
+            : 'Nenhuma tarefa encontrada.';
         listaTarefas.appendChild(vazio);
     } else {
         visiveis.forEach(tarefa => listaTarefas.appendChild(criarItem(tarefa)));
@@ -263,9 +295,10 @@ function adicionarTarefa() {
         return;
     }
 
-    tarefas.push({ id: Date.now(), texto, concluida: false, prazo });
+    tarefas.push({ id: Date.now(), texto, concluida: false, prazo, categoria: campoCategoria.value });
     campoTarefa.value = '';
     campoPrazo.value = '';
+    campoCategoria.value = '';
     limparErro();
     salvarTarefas();
     renderizar();
@@ -276,6 +309,46 @@ function alternarConclusao(id) {
     const tarefa = tarefas.find(t => t.id === id);
     if (!tarefa) return;
     tarefa.concluida = !tarefa.concluida;
+    salvarTarefas();
+    renderizar();
+}
+
+function exportarTarefas() {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([JSON.stringify(tarefas, null, 2)], { type: 'application/json' }));
+    link.download = 'tarefas.json';
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
+
+function importarTarefas(arquivo) {
+    const leitor = new FileReader();
+    leitor.onload = () => {
+        try {
+            const lidas = JSON.parse(leitor.result);
+            if (!Array.isArray(lidas) || !lidas.every(t => t && typeof t.texto === 'string')) throw new Error('formato');
+            if (!confirm(`Substituir a lista atual por ${lidas.length} tarefa(s) do backup?`)) return;
+            tarefas = lidas.map((t, i) => ({
+                id: Number(t.id) || Date.now() + i,
+                texto: t.texto.slice(0, 40),
+                concluida: !!t.concluida,
+                prazo: t.prazo || null,
+                importante: !!t.importante,
+                categoria: t.categoria || ''
+            }));
+            salvarTarefas();
+            renderizar();
+        } catch (erro) {
+            mostrarErro('Arquivo de backup inválido.');
+        }
+    };
+    leitor.readAsText(arquivo);
+}
+
+function alternarImportante(id) {
+    const tarefa = tarefas.find(t => t.id === id);
+    if (!tarefa) return;
+    tarefa.importante = !tarefa.importante;
     salvarTarefas();
     renderizar();
 }
@@ -307,11 +380,25 @@ listaTarefas.addEventListener('click', evento => {
     if (!item) return;
     const id = Number(item.dataset.id);
 
-    if (evento.target.closest('.excluir')) {
+    if (evento.target.closest('.estrela')) {
+        alternarImportante(id);
+    } else if (evento.target.closest('.excluir')) {
         excluirTarefa(id);
     } else if (evento.target.closest('.concluir') || evento.target.closest('.texto-tarefa')) {
         alternarConclusao(id);
     }
+});
+
+campoBusca.addEventListener('input', () => {
+    busca = campoBusca.value.trim().toLowerCase();
+    renderizar();
+});
+
+document.getElementById('botao-exportar').addEventListener('click', exportarTarefas);
+document.getElementById('botao-importar').addEventListener('click', () => arquivoBackup.click());
+arquivoBackup.addEventListener('change', () => {
+    if (arquivoBackup.files[0]) importarTarefas(arquivoBackup.files[0]);
+    arquivoBackup.value = ''; // permite importar o mesmo arquivo de novo
 });
 
 botaoTema.addEventListener('click', () => {
@@ -355,6 +442,10 @@ listaTarefas.addEventListener('keydown', evento => {
         evento.preventDefault();
         alternarConclusao(Number(span.closest('.item-tarefa').dataset.id));
     }
+});
+
+document.getElementById('botao-novidades').addEventListener('click', () => {
+    document.getElementById('modal-novidades').showModal();
 });
 
 // ===== Inicialização =====

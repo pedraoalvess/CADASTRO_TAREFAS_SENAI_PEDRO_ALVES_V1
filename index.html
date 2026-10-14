@@ -6,7 +6,7 @@
     <title>Meu Painel de Tarefas - SENAI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -17,9 +17,12 @@
             <button class="botao-icone" id="botao-alterar-tema" aria-label="Alternar tema claro/escuro" title="Alternar tema">
                 <i class="fa-solid fa-moon"></i>
             </button>
+            <button class="botao-icone" id="botao-novidades" aria-label="Ver funcionalidades extras" title="Funcionalidades extras">
+                <i class="fa-solid fa-circle-info"></i>
+            </button>
             <div class="perfil">
                 <img class="avatar" src="avatar.webp" alt="Foto de perfil">
-                <h1>Minhas Tarefas ✨</h1>
+                <h1>Minhas tarefas</h1>
             </div>
         </header>
 
@@ -35,6 +38,17 @@
             <input type="date" id="campo-prazo">
         </div>
 
+        <div class="linha-prazo ultima">
+            <label for="campo-categoria"><i class="fa-solid fa-tag"></i> Categoria</label>
+            <select id="campo-categoria">
+                <option value="">Sem categoria</option>
+                <option>Estudos</option>
+                <option>Casa</option>
+                <option>Trabalho</option>
+                <option>Outros</option>
+            </select>
+        </div>
+
         <p class="mensagem-erro" id="mensagem-erro" role="alert" hidden></p>
 
         <div class="progresso">
@@ -48,6 +62,8 @@
             <button class="filtro" data-filtro="concluidas">Concluídas</button>
         </div>
 
+        <input type="text" class="busca" id="campo-busca" placeholder="Buscar nas tarefas..." autocomplete="off" aria-label="Buscar nas tarefas">
+
         <ul class="lista-tarefas" id="lista-tarefas">
             <!-- As tarefas serão inseridas dinamicamente via JavaScript -->
         </ul>
@@ -55,8 +71,34 @@
         <footer class="rodape-aplicacao">
             <span id="contador-tarefas">0 tarefas na lista</span>
             <button class="botao-limpar" id="botao-limpar" hidden><i class="fa-solid fa-broom"></i> Limpar concluídas</button>
+            <div class="backup">
+                <button class="botao-link" id="botao-exportar"><i class="fa-solid fa-download"></i> Exportar backup</button>
+                <button class="botao-link" id="botao-importar"><i class="fa-solid fa-upload"></i> Importar backup</button>
+                <input type="file" id="arquivo-backup" accept="application/json" hidden>
+            </div>
         </footer>
     </div>
+
+    <dialog class="modal-novidades" id="modal-novidades" aria-label="Funcionalidades extras">
+        <h3>Funcionalidades extras</h3>
+        <ul>
+            <li><strong>Prazo:</strong> data limite opcional, bloqueio de datas passadas, avisos de "Vence hoje" e "Atrasada" e quantos dias faltam.</li>
+            <li><strong>Filtros e progresso:</strong> Todas/Pendentes/Concluídas e barra com a % concluída (fica dourada ao terminar tudo).</li>
+            <li><strong>Importantes:</strong> a estrela leva a tarefa para o topo da lista.</li>
+            <li><strong>Busca:</strong> acha tarefas pelo texto ou pela categoria.</li>
+            <li><strong>Categorias:</strong> Estudos, Casa, Trabalho ou Outros, com etiqueta em cada tarefa.</li>
+            <li><strong>Backup:</strong> exporta as tarefas para um arquivo e importa de volta.</li>
+        </ul>
+        <h3>Bônus</h3>
+        <ul>
+            <li>Editar com duplo clique</li>
+            <li>Desfazer exclusão</li>
+            <li>Limpar concluídas</li>
+            <li>Tema claro/escuro (com o escudo do Coritiba)</li>
+            <li>Tudo salvo no localStorage</li>
+        </ul>
+        <form method="dialog"><button class="botao-principal">Fechar</button></form>
+    </dialog>
 
     <div class="aviso" id="aviso" role="status" hidden>
         <span id="aviso-texto"></span>

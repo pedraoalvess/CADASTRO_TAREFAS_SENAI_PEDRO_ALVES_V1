@@ -1,60 +1,83 @@
-/* Variáveis CSS - facilitar o uso de temas para formatação */
+/* Paleta: verde do escudo do Coritiba, branco e o dourado da estrela */
 :root{
-    --gradiente-fundo: linear-gradient(160deg, #d8f3e4 0%, #cfe9fb 100%);
-    --fundo-cartao: #fff;
-    --cor-texto: #1f2d2a;
-    --cor-primaria: #1f9d6b;
-    --cor-primaria-destaque: #17805a;
-    --cor-borda: #eef7f2;
-    --cor-contorno: #cfe5da;
-    --cor-perigo: #e5484d;
-    --cor-sucesso: #1f9d6b;
-    --cor-concluido: #8a9a93;
-    --cor-atencao: #e17055;
-    --sombra-cartao: 0 20px 45px rgba(24, 90, 70, 0.18);
+    --fundo-pagina: #03534b;
+    --faixa-pagina: #045a50;
+    --fundo-cartao: #fbfcfb;
+    --cor-texto: #10231f;
+    --cor-suave: #5b6f69;
+    --cor-linha: #d7e1dd;
+    --cor-primaria: #03534b;
+    --cor-botao: #03534b;
+    --cor-botao-hover: #02403a;
+    --cor-ouro: #f5c400;
+    --cor-perigo: #c0392b;
+    --sombra-cartao: 7px 7px 0 rgba(0, 0, 0, 0.28);
 }
 
 /* Modo escuro (ativado via classe no body) */
 body.modo-escuro{
-    --gradiente-fundo: linear-gradient(160deg, #0c1f1b 0%, #0d2530 100%);
-    --fundo-cartao: #12261f;
-    --cor-texto: #eaf6f0;
-    --cor-primaria: #3ccf91;
-    --cor-primaria-destaque: #2fb67c;
-    --cor-borda: #1b3a30;
-    --cor-contorno: #2c5446;
-    --cor-concluido: #7fa092;
-    --sombra-cartao: 0 20px 45px rgba(0, 0, 0, 0.45);
+    --fundo-pagina: #04100e;
+    --faixa-pagina: #07191a;
+    --fundo-cartao: #0b1f1b;
+    --cor-texto: #e8f2ee;
+    --cor-suave: #8fa9a0;
+    --cor-linha: #1f3a33;
+    --cor-primaria: #4cc9a0;
+    --cor-botao: #1c8564;
+    --cor-botao-hover: #17725a;
+    --cor-perigo: #ff7a6b;
+    --sombra-cartao: 7px 7px 0 rgba(0, 0, 0, 0.5);
 }
 
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
 body{
-    background: var(--gradiente-fundo);
+    font-family: 'Public Sans', system-ui, sans-serif;
+    /* faixas de gramado que deslizam; 113.137px = 80px de faixa na diagonal, por isso o loop não pula */
+    background: repeating-linear-gradient(135deg, var(--fundo-pagina) 0 40px, var(--faixa-pagina) 40px 80px) 0 0 / 113.137px 113.137px;
+    animation: gramado 6s linear infinite;
+    color: var(--cor-texto);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    transition: background-color 0.3s;
+}
+
+@keyframes gramado{
+    to{
+        background-position: 113.137px 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce){
+    body{
+        animation: none;
+    }
+}
+
+button,
+input{
+    font: inherit;
+    color: inherit;
 }
 
 .cartao-aplicacao{
     background: var(--fundo-cartao);
-    color: var(--cor-texto);
     width: 100%;
-    max-width: 420px;
-    border-radius: 24px;
+    max-width: 440px;
+    border-radius: 6px;
     padding: 30px;
     box-shadow: var(--sombra-cartao);
     overflow: hidden;
     position: relative;
     isolation: isolate; /* mantém a marca d'água atrás do conteúdo, mas acima do fundo do cartão */
+    transition: background-color 0.3s;
 }
 
 /* Escudo do Coritiba: marca d'água que só aparece no modo escuro */
@@ -70,7 +93,7 @@ body{
 }
 
 body.modo-escuro .cartao-aplicacao::before{
-    opacity: 0.25; /* aumente para ficar mais forte, diminua para ficar mais sutil */
+    opacity: 0.22;
 }
 
 /* Cabeçalho: capa de céu + foto de perfil redonda */
@@ -82,7 +105,7 @@ body.modo-escuro .cartao-aplicacao::before{
 .capa{
     display: block;
     width: 100%;
-    height: 130px;
+    height: 140px;
     object-fit: cover;
 }
 
@@ -91,69 +114,72 @@ body.modo-escuro .cartao-aplicacao::before{
     align-items: flex-end;
     gap: 14px;
     padding: 0 30px;
-    margin-top: -48px;
+    margin-top: -46px;
 }
 
 .avatar{
-    width: 96px;
-    height: 96px;
+    width: 92px;
+    height: 92px;
     flex-shrink: 0;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--fundo-cartao);
-    box-shadow: 0 0 0 3px var(--cor-primaria), 0 8px 18px rgba(0, 0, 0, 0.18);
 }
 
 .perfil h1{
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 8px;
+    font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
 }
 
 .botao-icone{
     position: absolute;
     top: 14px;
     right: 14px;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
     border-radius: 50%;
-    font-size: 1.05rem;
+    font-size: 1rem;
     color: #fff;
     cursor: pointer;
 }
 
 .botao-icone:hover{
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 0, 0, 0.6);
 }
 
+#botao-novidades{
+    right: 60px;
+}
+
+/* ===== Formulário ===== */
 .caixa-entrada{
     display: flex;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
 input[type="text"],
 input[type="date"]{
     flex: 1;
     min-width: 0;
-    padding: 12px 15px;
-    border: 2px solid var(--cor-contorno);
-    border-radius: 12px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--cor-linha);
+    border-radius: 4px;
+    background: transparent;
     outline: none;
     font-size: 0.95rem;
-    background: transparent;
-    color: var(--cor-texto);
 }
 
 input[type="text"]:focus,
 input[type="date"]:focus{
     border-color: var(--cor-primaria);
-    box-shadow: 0 0 0 4px rgba(31, 157, 107, 0.15);
 }
 
 input[type="text"].invalido,
@@ -166,32 +192,26 @@ body.modo-escuro input[type="date"]{
 }
 
 .botao-principal{
-    background: linear-gradient(135deg, #2bb673, var(--cor-primaria));
+    background: var(--cor-botao);
     color: #fff;
     border: none;
-    padding: 12px 18px;
-    border-radius: 12px;
-    font-weight: 700;
+    padding: 11px 18px;
+    border-radius: 4px;
+    font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
-    box-shadow: 0 6px 14px rgba(31, 157, 107, 0.3);
-    transition: transform 0.1s, box-shadow 0.2s, filter 0.2s;
 }
 
 .botao-principal:hover{
-    filter: brightness(0.95);
-    transform: translateY(-2px);
-    box-shadow: 0 9px 18px rgba(31, 157, 107, 0.35);
-}
-
-.botao-principal:active{
-    transform: translateY(0);
+    background: var(--cor-botao-hover);
 }
 
 .botao-principal:focus-visible,
 .botao-icone:focus-visible,
-.botao-acao:focus-visible{
-    outline: 3px solid var(--cor-primaria);
+.botao-acao:focus-visible,
+.filtro:focus-visible,
+.texto-tarefa:focus-visible{
+    outline: 3px solid var(--cor-ouro);
     outline-offset: 2px;
 }
 
@@ -199,52 +219,110 @@ body.modo-escuro input[type="date"]{
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 0.85rem;
 }
 
 .linha-prazo label{
     white-space: nowrap;
-    color: var(--cor-concluido);
-    font-weight: 600;
+    color: var(--cor-suave);
 }
 
 .linha-prazo input[type="date"]{
-    padding: 8px 12px;
+    padding: 7px 10px;
 }
 
 .mensagem-erro{
     color: var(--cor-perigo);
     font-size: 0.85rem;
-    margin: -8px 0 15px 4px;
+    margin: -8px 0 14px;
 }
 
 .mensagem-erro[hidden]{
     display: none;
 }
 
+/* ===== Progresso ===== */
+.progresso{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.progresso-trilho{
+    flex: 1;
+    height: 10px;
+    background: var(--cor-linha);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progresso-barra{
+    height: 100%;
+    width: 0;
+    background: var(--cor-primaria);
+    transition: width 0.5s ease;
+}
+
+/* A estrela do escudo: a barra fica dourada quando tudo está concluído */
+.progresso-barra.completa{
+    background: var(--cor-ouro);
+}
+
+#texto-progresso{
+    font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    min-width: 108px;
+    text-align: right;
+}
+
+/* ===== Filtros e busca ===== */
+.filtros{
+    display: flex;
+    border-bottom: 1.5px solid var(--cor-linha);
+    margin-bottom: 12px;
+}
+
+.filtro{
+    flex: 1;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1.5px;
+    background: transparent;
+    color: var(--cor-suave);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.filtro.ativo{
+    color: var(--cor-primaria);
+    border-bottom-color: var(--cor-primaria);
+}
+
+.busca{
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    font-size: 0.88rem;
+}
+
+/* ===== Lista ===== */
 .lista-tarefas{
     list-style: none;
     max-height: 280px;
     overflow-y: auto;
-    padding-right: 2px;
 }
 
 .item-tarefa{
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px 14px;
-    background: var(--cor-borda);
-    border-left: 4px solid var(--cor-primaria);
-    border-radius: 12px;
-    margin-bottom: 10px;
-    animation: aparecer 0.3s ease;
-}
-
-.item-tarefa.concluido{
-    border-left-color: var(--cor-concluido);
+    gap: 12px;
+    padding: 12px 2px;
+    border-bottom: 1px solid var(--cor-linha);
 }
 
 .info-tarefa{
@@ -252,24 +330,24 @@ body.modo-escuro input[type="date"]{
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
 }
 
 .texto-tarefa{
     cursor: pointer;
     word-break: break-word;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .item-tarefa.concluido .texto-tarefa{
     text-decoration: line-through;
-    color: var(--cor-concluido);
+    color: var(--cor-suave);
     font-weight: 400;
 }
 
 .prazo-tarefa{
     font-size: 0.78rem;
-    color: var(--cor-concluido);
+    color: var(--cor-suave);
 }
 
 .prazo-tarefa.hoje{
@@ -278,13 +356,13 @@ body.modo-escuro input[type="date"]{
 }
 
 .prazo-tarefa.atrasada{
-    color: var(--cor-atencao);
+    color: var(--cor-perigo);
     font-weight: 700;
 }
 
 .acoes-tarefa{
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .botao-acao{
@@ -292,11 +370,34 @@ body.modo-escuro input[type="date"]{
     border: none;
     cursor: pointer;
     font-size: 1rem;
-    color: var(--cor-texto);
+    color: var(--cor-suave);
+}
+
+/* Botão de concluir = caixa de seleção redonda à esquerda */
+.botao-acao.concluir{
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--cor-primaria);
+    border-radius: 50%;
+    font-size: 0.7rem;
+    color: transparent;
 }
 
 .botao-acao.concluir:hover{
-    color: var(--cor-sucesso);
+    color: var(--cor-primaria);
+}
+
+.item-tarefa.concluido .botao-acao.concluir{
+    background: var(--cor-primaria);
+    color: var(--fundo-cartao);
+}
+
+.botao-acao.estrela:hover,
+.botao-acao.estrela.ativa{
+    color: var(--cor-ouro);
 }
 
 .botao-acao.excluir:hover{
@@ -305,102 +406,20 @@ body.modo-escuro input[type="date"]{
 
 .lista-vazia{
     text-align: center;
-    padding: 20px 0;
-    color: var(--cor-concluido);
+    padding: 22px 0;
+    color: var(--cor-suave);
     font-size: 0.9rem;
 }
 
-.rodape-aplicacao{
-    margin-top: 15px;
-    font-size: 0.85rem;
-    color: var(--cor-concluido);
-    text-align: center;
-    font-weight: 600;
-}
-
-@keyframes aparecer{
-    from{
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to{
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (prefers-reduced-motion: reduce){
-    .item-tarefa{
-        animation: none;
-    }
-}
-
-/* ===== Progresso ===== */
-.progresso{
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--cor-concluido);
-}
-
-.progresso-trilho{
-    flex: 1;
-    height: 8px;
-    background: var(--cor-borda);
-    border-radius: 99px;
-    overflow: hidden;
-}
-
-.progresso-barra{
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, #2bb673, var(--cor-primaria));
-    border-radius: 99px;
-    transition: width 0.5s ease;
-}
-
-/* ===== Filtros ===== */
-.filtros{
-    display: flex;
-    gap: 6px;
-    padding: 4px;
-    margin-bottom: 14px;
-    background: var(--cor-borda);
-    border-radius: 12px;
-}
-
-.filtro{
-    flex: 1;
-    padding: 7px 4px;
-    border: none;
-    border-radius: 9px;
-    background: transparent;
-    color: var(--cor-concluido);
-    font-weight: 700;
-    font-size: 0.82rem;
-    cursor: pointer;
-}
-
-.filtro.ativo{
-    background: var(--fundo-cartao);
-    color: var(--cor-primaria);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.filtro:focus-visible{
-    outline: 3px solid var(--cor-primaria);
-}
-
-/* ===== Edição inline, limpar e aviso ===== */
+/* ===== Rodapé e aviso ===== */
 input[type="text"].edicao{
     padding: 6px 10px;
-    border-radius: 8px;
 }
 
 .rodape-aplicacao{
+    margin-top: 16px;
+    font-size: 0.85rem;
+    color: var(--cor-suave);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -411,8 +430,8 @@ input[type="text"].edicao{
     border: none;
     background: none;
     color: var(--cor-perigo);
-    font-weight: 700;
-    font-size: 0.82rem;
+    font-weight: 600;
+    font-size: 0.85rem;
     cursor: pointer;
 }
 
@@ -436,18 +455,110 @@ input[type="text"].edicao{
     padding: 12px 18px;
     background: var(--cor-texto);
     color: var(--fundo-cartao);
-    border-radius: 14px;
+    border-radius: 4px;
     font-weight: 600;
     font-size: 0.9rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
 
 .aviso button{
     border: none;
     background: none;
-    color: inherit;
-    font-weight: 800;
+    font-weight: 700;
     text-decoration: underline;
     cursor: pointer;
+}
+
+/* ===== Modal de funcionalidades extras ===== */
+/* margin: auto porque o reset "* { margin: 0 }" tira o centro automático do dialog */
+.modal-novidades{
+    margin: auto;
+    width: calc(100% - 40px);
+    max-width: 400px;
+    padding: 26px;
+    border: none;
+    border-radius: 6px;
+    background: var(--fundo-cartao);
+    color: var(--cor-texto);
+    box-shadow: var(--sombra-cartao);
+}
+
+.modal-novidades::backdrop{
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.modal-novidades h3{
+    margin: 14px 0 6px;
+    font-size: 1rem;
+    color: var(--cor-primaria);
+}
+
+.modal-novidades ul{
+    padding-left: 20px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.modal-novidades form{
+    margin-top: 18px;
+    text-align: right;
+}
+
+/* ===== Categoria, backup ===== */
+.linha-prazo.ultima{
+    margin-bottom: 20px;
+}
+
+.linha-prazo select{
+    flex: 1;
+    min-width: 0;
+    padding: 7px 10px;
+    border: 1.5px solid var(--cor-linha);
+    border-radius: 4px;
+    background: var(--fundo-cartao);
+    font-size: 0.85rem;
+}
+
+.linha-prazo select:focus{
+    outline: none;
+    border-color: var(--cor-primaria);
+}
+
+.meta-tarefa{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+}
+
+.categoria-tarefa{
+    padding: 1px 7px;
+    border: 1px solid var(--cor-primaria);
+    border-radius: 3px;
+    color: var(--cor-primaria);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.backup{
+    display: flex;
+    gap: 16px;
+}
+
+.botao-link{
+    border: none;
+    background: none;
+    color: var(--cor-suave);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.botao-link:hover{
+    color: var(--cor-primaria);
+    text-decoration: underline;
+}
+
+.botao-link:focus-visible{
+    outline: 3px solid var(--cor-ouro);
+    outline-offset: 2px;
 }
